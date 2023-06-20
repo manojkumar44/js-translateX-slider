@@ -15,72 +15,29 @@ document.addEventListener("DOMContentLoaded", function() {
   displayTrans.innerText = slider.style.transform = "translateX(0px)";
   displayStartPos.innerText = startPos + "px";
 
-  slider.addEventListener('mousedown', handleMouseDown);
-  slider.addEventListener('mouseup', handleMouseUp);
-  slider.addEventListener('mousemove', handleMouseMove);
-  slider.addEventListener('touchstart', handleTouchStart);
-  slider.addEventListener('touchend', handleTouchEnd);
-  slider.addEventListener('touchmove', handleTouchMove);
+  prevBtn.addEventListener("click", function(e) {
+    if (startPos === 0) {
+      startPos = -totalSlidesWidth;
+    } else {
+      startPos += changePos;
+    }
+    slider.style.transform = "translateX(" + startPos + "px)";
+    displayTrans.innerText = slider.style.transform;
+    displayStartPos.innerText = startPos + "px";
+  });
+
+  nextBtn.addEventListener("click", function(e) {
+    if (startPos === -totalSlidesWidth) {
+      startPos = 0;
+    } else {
+      startPos -= changePos;
+    }
+    slider.style.transform = "translateX(" + startPos + "px)";
+    displayTrans.innerText = slider.style.transform;
+    displayStartPos.innerText = startPos + "px";
+  });
 
   document.addEventListener('keydown', handleKeyDown);
-
-  function handleMouseDown(event) {
-    event.preventDefault();
-    startPos = getTranslateXValue();
-    dragStartX = event.clientX;
-    slider.classList.add('slider-transition');
-  }
-
-  function handleMouseUp(event) {
-    event.preventDefault();
-    var dragEndX = event.clientX;
-    handleDrag(dragEndX);
-    slider.classList.remove('slider-transition');
-  }
-
-  function handleMouseMove(event) {
-    event.preventDefault();
-    if (event.buttons === 1) {
-      var dragEndX = event.clientX;
-      handleDrag(dragEndX);
-    }
-  }
-
-  function handleTouchStart(event) {
-    event.preventDefault();
-    startPos = getTranslateXValue();
-    touchStartX = event.touches[0].clientX;
-    slider.classList.add('slider-transition');
-  }
-
-  function handleTouchEnd(event) {
-    event.preventDefault();
-    var touchEndX = event.changedTouches[0].clientX;
-    handleDrag(touchEndX);
-    slider.classList.remove('slider-transition');
-  }
-
-  function handleTouchMove(event) {
-    event.preventDefault();
-    var touchEndX = event.touches[0].clientX;
-    handleDrag(touchEndX);
-  }
-
-  function handleDrag(endX) {
-    var dragDistance = endX - touchStartX;
-    var dragSlides = Math.round(dragDistance / slideWidth);
-    var newPos = startPos - (dragSlides * slideWidth);
-
-    if (newPos > 0) {
-      newPos = 0;
-    } else if (newPos < -totalSlidesWidth) {
-      newPos = -totalSlidesWidth;
-    }
-
-    slider.style.transform = "translateX(" + newPos + "px)";
-    displayTrans.innerText = slider.style.transform;
-    displayStartPos.innerText = newPos + "px";
-  }
 
   function handleKeyDown(event) {
     switch (event.keyCode) {
@@ -107,11 +64,5 @@ document.addEventListener("DOMContentLoaded", function() {
       default:
         break;
     }
-  }
-
-  function getTranslateXValue() {
-    var transform = window.getComputedStyle(slider).getPropertyValue('transform');
-    var matrix = new WebKitCSSMatrix(transform);
-    return matrix.m41;
   }
 });
