@@ -19,17 +19,17 @@ document.addEventListener("DOMContentLoaded", function() {
   displayStartPos.style.color = "#ffffff";
 
   // Obtain the total no. of slides
-  var total_slides = slides.length;
+  var totalSlides = slides.length;
 
   // Create variables for previous and next slides as well as the first and last slides.
   var firstSlide = slides[0];
-  var lastSlide = slides[total_slides - 1];
+  var lastSlide = slides[totalSlides - 1];
 
   // Calculate the width of each li element (one slide)
   var slideWidth = firstSlide.offsetWidth;
 
   // Calculate the combined width of all the slides
-  var totalSlidesWidth = slideWidth * (total_slides - 1);
+  var totalSlidesWidth = slideWidth * (totalSlides - 1);
 
   var startPos = 0;
   var changePos = slideWidth;
@@ -52,6 +52,7 @@ document.addEventListener("DOMContentLoaded", function() {
     event.preventDefault();
     startPos = getTranslateXValue();
     dragStartX = event.clientX;
+    slider.classList.add('slider-transition'); // Add CSS transition for smooth animation
   }
 
   // Function to handle mouse up event
@@ -59,6 +60,7 @@ document.addEventListener("DOMContentLoaded", function() {
     event.preventDefault();
     var dragEndX = event.clientX;
     handleDrag(dragEndX);
+    slider.classList.remove('slider-transition'); // Remove CSS transition to stop animation
   }
 
   // Function to handle mouse move event
@@ -75,6 +77,7 @@ document.addEventListener("DOMContentLoaded", function() {
     event.preventDefault();
     startPos = getTranslateXValue();
     touchStartX = event.touches[0].clientX;
+    slider.classList.add('slider-transition'); // Add CSS transition for smooth animation
   }
 
   // Function to handle touch end event
@@ -82,6 +85,7 @@ document.addEventListener("DOMContentLoaded", function() {
     event.preventDefault();
     var touchEndX = event.changedTouches[0].clientX;
     handleDrag(touchEndX);
+    slider.classList.remove('slider-transition'); // Remove CSS transition to stop animation
   }
 
   // Function to handle touch move event
@@ -93,8 +97,9 @@ document.addEventListener("DOMContentLoaded", function() {
 
   // Function to handle dragging based on the start and end positions
   function handleDrag(endX) {
-    var dragDistance = endX - dragStartX;
-    var newPos = startPos + dragDistance;
+    var dragDistance = endX - touchStartX;
+    var dragSlides = Math.round(dragDistance / slideWidth);
+    var newPos = startPos - (dragSlides * slideWidth);
 
     if (newPos > 0) {
       // Dragged towards the right
@@ -143,8 +148,8 @@ document.addEventListener("DOMContentLoaded", function() {
 
   // Utility function to get the current translateX value
   function getTranslateXValue() {
-    var transform = slider.style.transform;
-    var translateX = transform.match(/translateX\(([-\d]+)px\)/);
-    return translateX ? parseInt(translateX[1]) : 0;
+    var transform = window.getComputedStyle(slider).getPropertyValue('transform');
+    var matrix = new WebKitCSSMatrix(transform);
+    return matrix.m41;
   }
 });
