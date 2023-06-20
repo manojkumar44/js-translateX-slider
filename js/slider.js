@@ -91,10 +91,10 @@ document.addEventListener("DOMContentLoaded", function() {
     handleDrag(touchEndX);
   }
 
-  // Function to handle drag event
+  // Function to handle dragging based on the start and end positions
   function handleDrag(endX) {
-    var distance = endX - dragStartX;
-    var newPos = startPos + distance;
+    var dragDistance = endX - dragStartX;
+    var newPos = startPos + dragDistance;
 
     if (newPos > 0) {
       // Dragged towards the right
@@ -114,25 +114,31 @@ document.addEventListener("DOMContentLoaded", function() {
     switch (event.keyCode) {
       case 37: // left arrow key
         if (startPos === 0) {
-          prevBtn.click();
+          slider.style.transform = "translateX(-" + totalSlidesWidth + "px)";
+          displayTrans.innerText = slider.style.transform;
+          displayStartPos.innerText = "-" + totalSlidesWidth + "px";
         } else {
           startPos += changePos;
+          slider.style.transform = "translateX(" + startPos + "px)";
+          displayTrans.innerText = slider.style.transform;
+          displayStartPos.innerText = startPos + "px";
         }
         break;
       case 39: // right arrow key
         if (startPos === -totalSlidesWidth) {
-          nextBtn.click();
+          slider.style.transform = "translateX(0px)";
+          displayTrans.innerText = slider.style.transform;
+          displayStartPos.innerText = "0px";
         } else {
           startPos -= changePos;
+          slider.style.transform = "translateX(" + startPos + "px)";
+          displayTrans.innerText = slider.style.transform;
+          displayStartPos.innerText = startPos + "px";
         }
         break;
       default:
         break;
     }
-
-    slider.style.transform = "translateX(" + startPos + "px)";
-    displayTrans.innerText = slider.style.transform;
-    displayStartPos.innerText = startPos + "px";
   }
 
   // Utility function to get the current translateX value
@@ -141,28 +147,4 @@ document.addEventListener("DOMContentLoaded", function() {
     var translateX = transform.match(/translateX\(([-\d]+)px\)/);
     return translateX ? parseInt(translateX[1]) : 0;
   }
-
-  prevBtn.addEventListener("click", function(e) {
-    // If this is the first slide, show the last one in the slideshow instead
-    if (startPos === 0) {
-      startPos = -totalSlidesWidth;
-    } else {
-      startPos += changePos;
-    }
-    slider.style.transform = "translateX(" + startPos + "px)";
-    displayTrans.innerText = slider.style.transform;
-    displayStartPos.innerText = startPos + "px";
-  });
-
-  nextBtn.addEventListener("click", function(e) {
-    // If this is the last slide, show the first one in the slideshow instead
-    if (startPos === -totalSlidesWidth) {
-      startPos = 0;
-    } else {
-      startPos -= changePos;
-    }
-    slider.style.transform = "translateX(" + startPos + "px)";
-    displayTrans.innerText = slider.style.transform;
-    displayStartPos.innerText = startPos + "px";
-  });
 });
