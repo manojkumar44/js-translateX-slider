@@ -113,19 +113,21 @@ document.addEventListener("DOMContentLoaded", function() {
   function handleKeyDown(event) {
     switch (event.keyCode) {
       case 37: // left arrow key
-        startPos += changePos; // Increment startPos by changePos
+        if (startPos === 0) {
+          startPos = -totalSlidesWidth;
+        } else {
+          startPos += changePos;
+        }
         break;
       case 39: // right arrow key
-        startPos -= changePos; // Decrement startPos by changePos
+        if (startPos === -totalSlidesWidth) {
+          startPos = 0;
+        } else {
+          startPos -= changePos;
+        }
         break;
       default:
         break;
-    }
-    // Adjust startPos to stay within the bounds of the slider
-    if (startPos > 0) {
-      startPos = 0;
-    } else if (startPos < -totalSlidesWidth) {
-      startPos = -totalSlidesWidth;
     }
   
     slider.style.transform = "translateX(" + startPos + "px)";
@@ -167,23 +169,31 @@ document.addEventListener("DOMContentLoaded", function() {
   window.addEventListener("keyup", function (event) {
     switch (event.keyCode) {
       case 37: // left arrow key
-        startPos += changePos; // Increment startPos by changePos
+        if (startPos === 0) {
+          startPos = -totalSlidesWidth;
+        } else {
+          startPos += changePos;
+        }
         break;
       case 39: // right arrow key
-        startPos -= changePos; // Decrement startPos by changePos
+        if (startPos === -totalSlidesWidth) {
+          startPos = 0;
+        } else {
+          startPos -= changePos;
+        }
         break;
       default:
         break;
     }
-    // Adjust startPos to stay within the bounds of the slider
-    if (startPos > 0) {
-      startPos = 0;
-    } else if (startPos < -totalSlidesWidth) {
-      startPos = -totalSlidesWidth;
+
+    // If the user presses the right arrow key on the last slide,
+    // simulate a click on the next button
+    if (startPos === -totalSlidesWidth && event.keyCode === 39) {
+      nextBtn.click();
+    } else {
+      slider.style.transform = "translateX(" + startPos + "px)";
+      displayTrans.innerText = slider.style.transform;
+      displayStartPos.innerText = startPos + "px";
     }
-  
-    slider.style.transform = "translateX(" + startPos + "px)";
-    displayTrans.innerText = slider.style.transform;
-    displayStartPos.innerText = startPos + "px";
   });
 });
