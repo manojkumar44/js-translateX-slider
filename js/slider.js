@@ -113,14 +113,24 @@ document.addEventListener("DOMContentLoaded", function() {
   function handleKeyDown(event) {
     switch (event.keyCode) {
       case 37: // left arrow key
-        prevBtn.click(); // Simulate a click on the previous button
+        startPos += changePos; // Increment startPos by changePos
         break;
       case 39: // right arrow key
-        nextBtn.click(); // Simulate a click on the next button
+        startPos -= changePos; // Decrement startPos by changePos
         break;
       default:
         break;
     }
+    // Adjust startPos to stay within the bounds of the slider
+    if (startPos > 0) {
+      startPos = 0;
+    } else if (startPos < -totalSlidesWidth) {
+      startPos = -totalSlidesWidth;
+    }
+  
+    slider.style.transform = "translateX(" + startPos + "px)";
+    displayTrans.innerText = slider.style.transform;
+    displayStartPos.innerText = startPos + "px";
   }
 
   // Utility function to get the current translateX value
@@ -157,13 +167,23 @@ document.addEventListener("DOMContentLoaded", function() {
   window.addEventListener("keyup", function (event) {
     switch (event.keyCode) {
       case 37: // left arrow key
-        prevBtn.click(); // Simulate a click on the previous button
+        startPos += changePos; // Increment startPos by changePos
         break;
       case 39: // right arrow key
-        nextBtn.click(); // Simulate a click on the next button
+        startPos -= changePos; // Decrement startPos by changePos
         break;
       default:
         break;
     }
+    // Adjust startPos to stay within the bounds of the slider
+    if (startPos > 0) {
+      startPos = 0;
+    } else if (startPos < -totalSlidesWidth) {
+      startPos = -totalSlidesWidth;
+    }
+  
+    slider.style.transform = "translateX(" + startPos + "px)";
+    displayTrans.innerText = slider.style.transform;
+    displayStartPos.innerText = startPos + "px";
   });
 });
