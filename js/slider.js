@@ -108,19 +108,32 @@ function handleDrag(endX) {
   displayStartPos.innerText = newPos + "px";
 }
 
+// ...
+
 // Function to handle keyboard arrow keys
 function handleKeyDown(event) {
   switch (event.keyCode) {
     case 37: // left arrow key
+      prevBtn.classList.add("hover-effect"); // Add the hover-effect class to apply the hover styles
       prevBtn.click(); // Simulate a click on the previous button
+      setTimeout(function() {
+        prevBtn.classList.remove("hover-effect"); // Remove the hover-effect class after the click simulation
+      }, 500); // Adjust the timeout value to match the transition duration in CSS
       break;
     case 39: // right arrow key
+      nextBtn.classList.add("hover-effect"); // Add the hover-effect class to apply the hover styles
       nextBtn.click(); // Simulate a click on the next button
+      setTimeout(function() {
+        nextBtn.classList.remove("hover-effect"); // Remove the hover-effect class after the click simulation
+      }, 500); // Adjust the timeout value to match the transition duration in CSS
       break;
     default:
       break;
   }
 }
+
+// ...
+
 
 // Utility function to get the current translateX value
 function getTranslateXValue() {
